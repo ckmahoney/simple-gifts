@@ -1,0 +1,47 @@
+-- Simple Gifts by Joseph Brackett
+
+-- [A]
+-- Tis the gift to be simple, tis the gift to be free,
+-- the gift to come down where we ought to be,
+-- And when we find ourselves in the place just right,
+-- Twill be in the valley of love and delight.
+
+-- (repeat A section)
+
+-- [B] 
+-- When true simplicity is gained,
+-- To bow and to bend we shan't be ashamed,
+-- To turn, dance, will be our delight,
+-- by turning, dancing, We come round right.
+
+-- (repeat B section)
+
+-- clone me at
+-- https://github.com/gist
+
+setcps 1.075
+
+hush
+
+let
+  transpose = 8 -- adjust to fit your voice :) 
+  progA = "c'maj@8 g'maj@8 c'maj@8 g'maj@6 c'maj@2" + transpose
+  progB = "c'maj@12 g'maj@4 c'maj@8 g'maj@4 c'maj@4" + transpose
+  timeScale = 16 -- helps for phrasing
+  offsetT = 32
+in
+do
+  resetCycles
+  d1 $ slow (timeScale/8) $ sound "bd sn cp <sn [hh27!1]>"
+  d2 $ slow timeScale $ sound "rave:1" # speed 0.8 # fshift 8 # amp 0.22
+    # room 0.5 # size 0.7 # delay 0.5 # dt 0.45 # dfb "0.2 0.3 0.4"
+  d6 $ ply 8 $ note transpose # sound "superfm"
+    |- note 24 # octer "0.25 0.50 [0.66 0.75]" # fshift 0.2
+  d7 $ seqP [
+      (0, 8, note "0" # sound "em2:0" # amp 0.1),
+      (8, 16, sound "em2:1" # amp 0.1),
+      (16, offsetT , slow 2 $ sound "em2:2" # amp 0.1),
+      (offsetT-2, offsetT, note ("<0,4,7>"+transpose) # sound "superhammond" # voice 3),
+      (offsetT, offsetT + 32, slow timeScale $ note progA  # sound "superhammond" # voice "1 8"),
+      (offsetT + 32, offsetT + 64, slow timeScale $ note progB # sound "superhammond" # voice 2)
+    ]
